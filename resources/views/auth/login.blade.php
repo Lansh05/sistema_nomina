@@ -24,7 +24,7 @@
                                             <!-- Header -->
                                             <div class="mb-2 text-center">
                                                 <a class="link-fx font-w700 font-size-h1" href="#">
-                                                    <span class="text-primary">Mis Finanzas</span>
+                                                    <span class="text-primary">Nomina</span>
                                                 </a>
                                                 <p class="text-uppercase font-w700 font-size-sm text-muted">Iniciar sesión</p>
                                             </div>
@@ -86,7 +86,7 @@
                                                     <p class="text-white font-w600 mb-1">
                                                         Bienvenido, por favor inicie sesión
                                                     </p>
-                                                    <a class="text-white-75 font-w600" href="javascript:void(0)">Fesoluciones</a>
+                                                    <a class="text-white-75 font-w600" href="javascript:void(0)"></a>
                                                 </div>
                                             </div>
                                         </div>
