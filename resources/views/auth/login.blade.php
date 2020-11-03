@@ -24,7 +24,7 @@
                                             <!-- Header -->
                                             <div class="mb-2 text-center">
                                                 <a class="link-fx font-w700 font-size-h1" href="#">
-                                                    <span class="text-primary">Nomina</span>
+                                                    <span class="text-primary" style="color:#FA58D0 !important;">Nomina</span>
                                                 </a>
                                                 <p class="text-uppercase font-w700 font-size-sm text-muted">Iniciar sesión</p>
                                             </div>
@@ -59,7 +59,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button type="submit" class="btn btn-block btn-hero-primary">
+                                                    <button type="submit" class="btn btn-block btn-hero-primary" stlye="background-color:#610B4B !important;">
                                                         <i class="fa fa-fw fa-sign-in-alt mr-1"></i> INICIAR SESIÓN
                                                     </button>
                                                 </div>
@@ -68,7 +68,7 @@
                                                 <div class="col-md-12">
                                                     <div class="mb-2 py-2 text-center">
                                                         <a class="img-link mr-3" href="javascript:void(0)">
-                                                            <img class="img-avatar img-avatar-thumb"  src="{{ asset('storage/img/compartidos/'.session()->get('idempresa').'_logoempresa.jpg') }}" alt="">
+                                                            <img class="img-avatar img-avatar-thumb"  src="../img/media/logo.jpg" alt="">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -76,11 +76,11 @@
                                             <!-- END Sign Up Form -->
                                         </div>
                                     </div>
-                                    <div class="col-md-6 order-md-0 bg-primary-dark-op d-flex align-items-center">
-                                        <div class="block-content block-content-full px-lg-5 py-md-5 py-lg-6">
+                                    <div class="col-md-6 order-md-0 bg-primary-dark-op d-flex align-items-center" style="background-color:#F781BE !important; >
+                                        <div class="block-content block-content-full px-lg-5 py-md-5 py-lg-6" style="background-color:#F781BE !important; ">
                                             <div class="media">
                                                 <a class="img-link mr-3" href="javascript:void(0)">
-                                                    <img class="img-avatar img-avatar-thumb" src="../storage/app/public/img/compartidos/3_logoempresa.jpg" alt="">
+                                                    <img class="img-avatar img-avatar-thumb" src="../img/media/logo.jpg" alt="">
                                                 </a>
                                                 <div class="media-body">
                                                     <p class="text-white font-w600 mb-1">

@@ -17,7 +17,7 @@
 
                         <a class="navbar-brand" href="{{ route('home') }}">
                             <span style="display: inline-block;line-height: 2em;position: relative;vertical-align: middle;width: 2.5em;font-size: 22px;">
-                                <img class="img-fluid" src="{{ asset('storage/'.session()->get(session()->get('idempresa').'_Configuracion.Web.logo')) }}"/>
+                                <img class="img-fluid" src="../img/media/header.jpg"/>
                             </span>
                         </a>
                         <!-- END Logo -->
@@ -38,7 +38,7 @@
                 <!-- Side Actions -->
                 <div class="content-side content-side-full text-center bg-body-light">
                     <div class="smini-hide">
-                        <img class="img-avatar" src="{{ asset('storage/'.auth()->user()->foto_perfil) }}" alt="Avatar">
+                        <img class="img-avatar" src="../img/media/logo.jpg" alt="Avatar">
                         <div class="mt-3 font-w600">
                             <?php
                                 
