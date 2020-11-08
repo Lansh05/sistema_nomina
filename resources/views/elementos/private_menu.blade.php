@@ -82,6 +82,20 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-main-item open">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="">
+                                <i class="fa fa-table  nav-main-link-icon  "></i>
+                                <span class="nav-main-link-name">Captura</span>
+                            </a>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link" href="{{url('capturas')}}">
+                                        <i class="fa fa-balance-scale nav-main-link-icon"></i>
+                                        <span class="nav-main-link-name">Capturar Día</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </div>
                 <!-- Empleados -->
                 <!-- Fin de Menu de Navigación a la derecha -->

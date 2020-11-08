@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+
+use App\Models\Captura;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -21,6 +23,21 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123456'),
             'nombre' => 'Administrador root',
             'email' => 'admin@gmail.com',
+        ));
+
+        Concepto::create(array(
+            'id' => 1,
+            'descripcion' => 'Retraso',
+        ));
+
+        Concepto::create(array(
+            'id' => 1,
+            'descripcion' => 'Puntual',
+        ));
+
+        Concepto::create(array(
+            'id' => 1,
+            'descripcion' => 'Falta',
         ));
 
     }

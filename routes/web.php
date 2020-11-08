@@ -40,6 +40,15 @@ Route::get('/', [App\Http\Controllers\Auth\LoginController::class,'showLoginForm
         Route::post('/puestos/store',[App\Http\Controllers\PuestoController::class,'store'])->name('puestos.store');
         Route::get('/puestos/delete/{id}',[App\Http\Controllers\PuestoController::class,'destroy'])->name('puestos.destroy');
         Route::get('/puestos/edit/{id}',[App\Http\Controllers\PuestoController::class,'edit'])->name('puestos.edit');
+
+        //RUTAS DE CAPTURAS
+
+        Route::get('/capturas',[App\Http\Controllers\CapturaController::class,'index'])->name('capturas.index');
+        Route::get('/capturas/create',[App\Http\Controllers\CapturaController::class,'create'])->name('capturas.create');
+        Route::post('/capturas/store',[App\Http\Controllers\CapturaController::class,'store'])->name('capturas.store');
+        Route::get('/capturas/delete/{id}',[App\Http\Controllers\CapturaController::class,'destroy'])->name('capturas.destroy');
+        Route::get('/capturas/edit/{id}',[App\Http\Controllers\CapturaController::class,'edit'])->name('capturas.edit');
+
     });
 
 

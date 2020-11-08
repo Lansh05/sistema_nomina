@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablePuestos extends Migration
+class CreateCapturasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateTablePuestos extends Migration
      */
     public function up()
     {
-        Schema::create('puestos', function (Blueprint $table) {
+        Schema::create('capturas', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
-            $table->string('descripcion',100)->nullable();
-            $table->decimal('salario')->nullable();
-            $table->integer('tiposueldo')->nullable();
-
+            $table->date('fecha')->nullable();
+            $table->integer('empleado')->nullable();
+            $table->string('nota',100)->nullable();
+            $table->integer('concepto')->nullable();
         });
     }
 
@@ -29,6 +29,6 @@ class CreateTablePuestos extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('puestos');
+        Schema::dropIfExists('capturas');
     }
 }

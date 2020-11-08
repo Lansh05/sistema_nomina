@@ -49,7 +49,7 @@
             @endif
             <div id="tabladatos" class="table2 table-responsive">
                 <table class="table">
-                    <thead>
+                    <thead class="thead-dark">
                     <tr>
                     <th>Acciones    </th>
                     <th>Descripcion      </th>
