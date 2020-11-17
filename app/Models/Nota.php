@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Captura extends Model
+class Nota extends Model
 {
     use HasFactory;
 
-  
-
-    protected $table = 'capturas';
+    protected $table = 'notas';
     public $timestamps=false;
  
     /**
      * @var array
      */
-    protected $fillable = ['fecha','empleado','concepto'];
+    protected $fillable = ['fecha','descripcion'];
 }

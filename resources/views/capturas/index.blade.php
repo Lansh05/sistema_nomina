@@ -3,6 +3,7 @@
     <!-- ANEXANDO NAVEGACION -->
     <div class="block block-rounded block-bordered">
         <div class="block-content block-content-full">
+        <form action="{{route('capturas.store')}}" method="POST" id="dataCaptura">
             <div class="row">
                 <div class="col-6">
                     <h2 class="content-heading" style="margin-bottom: 0;padding-top: 0; border-bottom: none; ">
@@ -54,14 +55,16 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <form action="{{route('capturas.store')}}" method="POST" id="dataCaptura">
+                    {{ csrf_field() }}
                         @foreach($empleados as $empleado)
                             <tr>
                                 <td>
                                     {{$empleado->nombre." ".$empleado->apellidopat}}
-                                    <button style="float:right;" title="Añadir Nota" type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat"><i class="fa fa-plus"></i></button>
+                                    <button style="float:right;" title="Añadir Nota" type="button" class="btn btn-success" onClick="openModal({{$empleado->id}})" data-whatever="@fat"><i class="fa fa-plus"></i></button>
 
                                 </td>
-                                    <input type="hidden" name="idempleado" id="idempleado" value="{{$empleado->id}}">
+                                    <input type="hidden" name="idempleado[]" id="idempleado" value="{{$empleado->id}}">
                                    
                         
                                 <td style="text-align:center;"> 
@@ -78,9 +81,10 @@
                     </tbody>
                 </table>
                 <div style="float:right">
-                    <button class="btn btn-warning">Terminar Captura</button>
+                    <button class="btn btn-warning" type="submit" onClick="event.preventDefault();document.getElementById('dataCaptura').submit();">Terminar Captura</button>
                 </div>
             </div>
+        </form>
         </div>
     </div>
     @endsection
@@ -95,6 +99,7 @@
         </button>
       </div>
       <div class="modal-body">
+      <input type="hidden" name="id" id="id">
         <form>
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Nota:</label>
@@ -104,8 +109,44 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-success">Guardar</button>
+        <button type="button" class="btn btn-success" onClick="addNota()">Guardar</button>
       </div>
     </div>
   </div>
 </div>
+
+
+<script>
+function openModal(id){
+    $('#exampleModal').modal("show");
+    $('#id').val(id);
+}
+
+
+        function addNota(){
+        var datos = new FormData();
+        datos.append( '_token', "{{ csrf_token() }}");
+        datos.append( 'idempleado', $('#id').val());
+        datos.append('descripcion',$('#nota').val());
+        datos.append('fecha', $('#fecha').val());
+
+        $.ajax({
+            url: '{{url("capturas")}}/storenota',
+            type:'POST',
+            data:datos,
+            contentType:false,
+            processData:false,
+            success:function(respuesta){
+                
+                $('#nota').val("");
+                $('#exampleModal').modal("hide");
+
+                Swal.fire('Eliminado!', '', 'success');
+                    
+              
+            }    
+        });
+    }
+
+
+</script>
