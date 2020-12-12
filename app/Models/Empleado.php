@@ -15,5 +15,5 @@ class Empleado extends Model
    /**
     * @var array
     */
-   protected $fillable = ['nombre','apellidpat','apellidomat','idpuesto','email','rfc','numtel'];
+   protected $fillable = ['nombre','apellidpat','apellidomat','idpuesto','email','rfc','numtel','numempleado','horaentrada','horasalida'];
 }

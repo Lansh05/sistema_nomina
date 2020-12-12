@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Captura;
+use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\Nota;
 use DB;
+use DateTime;
 
 class CapturaController extends Controller
 {
@@ -48,23 +50,68 @@ class CapturaController extends Controller
     public function store(Request $request)
     {
         //
-       foreach($request->idempleado as $ids){
-        $valid=Captura::where('fecha',$request->fecha)
-        ->where('empleado',$ids)->first();
-        $captura = new Captura ;
-        
-        if($valid){
-        $captura=Captura::findOrFail($valid->id);
+        $empleado=Empleado::where('numempleado','=',$request->numempleado)->first();
+        if(!$empleado)
+        return ['res'=>false , 'msg'=>"No se econtro empleado"];
+
+        $captura=Captura::where('empleado','=',$empleado->id)
+        ->where('fecha','=',$request->fecha)
+        ->first();
+        $newcaptura = new Captura;
+        $newcaptura->fecha=$request->fecha;
+        $newcaptura->empleado=$empleado->id;
+        $newcaptura->horacheck=$request->horacheck;
+        if($captura){
+            $newcaptura->horacheck=$request->horacheck;
+            if($request->horacheck<$empleado->horasalida){
+                $c = new DateTime( $request->horacheck );
+                $d = new DateTime( $empleado->horaentrada );
+                $dteDiff  = $c->diff($d);          
+               
+                $newcaptura->retraso=$dteDiff->format('%H:%I:%S');    
+                $newcaptura->llegada=2;
+
+                if($newcaptura->save()){
+                    return ["res"=>true,"msg"=>"Se a registrado su salida antes de tiempo!"];
+                }
+            }else{
+                $c = new DateTime( $request->horacheck );
+                $d = new DateTime( $empleado->horaentrada );
+                $dteDiff  = $c->diff($d);         
+                $newcaptura->retraso=$dteDiff->format('%H:%I:%S');        
+                $newcaptura->llegada=1;
+
+                if($newcaptura->save()){
+                    return ["res"=>true,"msg"=>"Se a registrado su salida puntualmente!"];
+                }
+            }
+                
+        }else{
+            if($request->horacheck>$empleado->horaentrada){
+                $c = new DateTime( $request->horacheck );
+                $d = new DateTime( $empleado->horaentrada );
+                $dteDiff  = $c->diff($d); 
+                $newcaptura->retraso=$dteDiff->format('%H:%I:%S');        
+                $newcaptura->llegada=2;
+               
+                if($newcaptura->save()){
+                    return ["res"=>true,"msg"=>"Se a registrado su llegada con un retraso!"];
+                }
+            }else{
+                $c = new DateTime( $request->horacheck );
+                $d = new DateTime( $empleado->horaentrada );
+                $dteDiff  = $c->diff($d); 
+                $newcaptura->retraso=$dteDiff->format('%H:%I:%S');       
+                $newcaptura->llegada=1;
+
+                if($newcaptura->save()){
+                    return ["res"=>true,"msg"=>"Se a registrado su llegada puntualmente!"];
+                }
+
+            }
         }
-        $idconcepto= 'concepto_'.$ids; 
-        $captura->fecha=$request->fecha;
-        $captura->empleado=$ids;
-        $captura->concepto=$request->$idconcepto;
-        $captura->save();
-       }
 
-
-       return redirect()->route('capturas.index');
+      
     }
 
     public function storeNota(Request $request)
@@ -96,86 +143,121 @@ class CapturaController extends Controller
 
     public function reporte(Request $request)
     {
-        $fecha=date('Y-m-d');
-        $nuevafecha = strtotime ( '-15 day' , strtotime ( $fecha ) ) ;
-        $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-        $capturas=DB::select("SELECT empleados.nombre,empleados.apellidopat,puestos.descripcion,empleados.id,puestos.salario,puestos.tiposueldo
-        FROM capturas 
-        inner join empleados 
-        on empleados.id=capturas.empleado
-        inner join puestos
-        on puestos.id=empleados.idpuesto
-        where fecha 
-        BETWEEN '$nuevafecha' and '$fecha' 
-        GROUP BY empleados.nombre,empleados.apellidopat,empleados.id,puestos.descripcion,puestos.salario,puestos.tiposueldo");
-
-        foreach($capturas as $captura){
-
-            $falta=DB::select("SELECT COUNT(*) as faltas
-            FROM capturas 
-            where fecha 
-            BETWEEN '$nuevafecha' and '$fecha' 
-            AND empleado=$captura->id
-            and concepto=3");
-
-            
-            $retrasos=DB::select("SELECT COUNT(*) as retrasos
-            FROM capturas 
-            where fecha 
-            BETWEEN '$nuevafecha' and '$fecha' 
-            AND empleado=$captura->id
-            and concepto=2");
-
-            $captura->msg="Tiene faltas";
-
-            if(!$falta)
-            $captura->msg="Puntualidad excelente!";
-            
-            if($falta)
-            $captura->faltas=$falta[0]->faltas;
-
-            if($retrasos)
-            $captura->retrasos=$retrasos[0]->retrasos;
-            
-         
-            
-            $captura->desc=0;
-            if($captura->tiposueldo==1){
-                $captura->total=$captura->salario;
-                if($captura->faltas>0){
-                    $desc=($captura->salario/15)*$captura->faltas;
-                    $captura->total-=$desc;
-                    $captura->desc=$desc;
-                }
-                $captura->salario=$captura->salario." Quincenal";
-            }
-            if($captura->tiposueldo==2){
-                $captura->total=$captura->salario*2;
-                if($captura->faltas>0){
-                    $desc=($captura->salario/7)*$captura->faltas;
-                    $captura->total-=$desc;
-                    $captura->desc=$desc;
-                }
-                $captura->salario=$captura->salario." Semanal";
-            }
-            if($captura->tiposueldo==3){
-                $captura->total=$captura->salario*15;
-                if($captura->faltas>0){
-                    $desc=($captura->salario)*$captura->faltas;
-                    $captura->total-=$desc;
-                    $captura->desc=$desc;
-                }
-                $captura->salario=$captura->salario." Diario";
-            }
-
-            if($captura->retrasos>0){
-                $captura->msg="Este usuario tuvo $captura->retrasos retrasos";
-            }
-
+        if(!$request->fecha){
+        $nuevafecha=date('Y-m-d');
+        $fecha = new DateTime();
+        $fecha->modify('first day of this month');
+        $fecha=$fecha->format('Y-m-d');
+        }else{
+            $nuevafecha=$request->nuevafecha;
+            $fecha=$request->fecha;
         }
-        
 
-        return view('capturas.reportes',compact('fecha','nuevafecha','capturas'));
+        $empleados=DB::select('  
+        select  
+        empleados.id,
+        empleados.nombre,
+        empleados.apellidomat,
+        empleados.apellidopat,
+        empleados.idpuesto,
+        empleados.email,
+        empleados.rfc,
+        empleados.numtel,
+        empleados.fechaalta,
+        empleados.numempleado,
+        empleados.horaentrada,
+        empleados.horasalida,
+        puestos.descripcion,
+        puestos.salario  ,
+        puestos.tiposueldo from empleados inner join puestos on puestos.id=empleados.id');
+
+        $dias;
+       $fechas=[];
+        $fechaInicio=strtotime("$fecha");
+        $fechaFin=strtotime("$nuevafecha");
+        //Recorro las fechas y con la función strotime obtengo los lunes
+       //Recorro las fechas y con la función strotime obtengo los lunes
+        for($i=$fechaInicio ,$k=0; $i<=$fechaFin; $i+=86400,$k++){
+            //Sacar el dia de la semana con el modificador N de la funcion date
+            $dia = date('N', $i);
+            if($dia==1){
+                $dias[$k]['dia'] = "Lunes ". date ("Y-m-d", $i) ;
+                $num2 = array_push( $fechas, date ("Y-m-d", $i) );
+               
+            }
+            if($dia==2){
+                $dias[$k]['dia'] = "Martes ". date ("Y-m-d", $i) ;
+                $num2 = array_push( $fechas, date ("Y-m-d", $i) );
+            }
+            if($dia==3){
+                $dias[$k]['dia'] = "Miercoles ". date ("Y-m-d", $i) ;
+                $num2 = array_push( $fechas, date ("Y-m-d", $i) );
+               
+            }
+            if($dia==4){
+                $dias[$k]['dia'] ="Jueves ". date ("Y-m-d", $i) ;
+                $num2 = array_push( $fechas, date ("Y-m-d", $i) );
+            }
+            if($dia==5){
+                $dias[$k]['dia']=  "Viernes ". date ("Y-m-d", $i) ;
+                $num2 = array_push( $fechas, date ("Y-m-d", $i) );
+               
+            }
+            if($dia==6){
+                $dias[$k]['dia'] = "Sabado ". date ("Y-m-d", $i) ;
+                $num2 = array_push( $fechas, date ("Y-m-d", $i) );
+            }
+            if($dia==7){
+                $dias[$k]['dia'] = "Domingo". date ("Y-m-d", $i) ;
+                $num2 = array_push( $fechas, date ("Y-m-d", $i) );
+            }
+        }
+       
+        $k=0;
+        $infoemp;
+
+        $faltas=[];
+        $retrasos=[];
+            foreach($empleados as $empleado){
+                $retrasos[$empleado->id]=0;
+                $faltas[$empleado->id]=0;
+            }
+        foreach($fechas as $fechacap){
+            foreach($empleados as $empleado){
+                $captura=Captura::where('fecha','=',$fechacap)->where('empleado','=',$empleado->id)->get();
+                if(count($captura)>0){
+                    if(count($captura)<2 && $captura[0]->llegada==1){
+                        $retrasos[$empleado->id]++;
+                        $dias[$k][$empleado->id]= "Este empleado no registro salida, llegada puntual";
+                        }
+                        if(count($captura)<2 && $captura[0]->llegada==2){
+                            $retrasos[$empleado->id]++;
+                            $dias[$k][$empleado->id]= "Este empleado no registro salida, llegada tarde con ". $captura[0]->retraso ." de retraso";
+                        }
+                        if(count($captura)==2 && $captura[0]->llegada==1 && $captura[1]->llegada==1){
+                            $dias[$k][$empleado->id]="Cumplio su horario correctamente";
+                        }
+                        if(count($captura)==2 && $captura[0]->llegada==2 && $captura[1]->llegada==1){
+                            $retrasos[$empleado->id]++;
+                            $dias[$k][$empleado->id]="Llego tarde con ". $captura[0]->retraso .", salio a tiempo";
+                        }
+                        if(count($captura)==2 && $captura[0]->llegada==1 && $captura[1]->llegada==2){
+                            $retrasos[$empleado->id]++;
+                            $dias[$k][$empleado->id]= "Llegada a tiempo, salida anticipada con ".$captura[1]->retraso;
+                        }
+                        if(count($captura)==2 && $captura[0]->llegada==2 && $captura[1]->llegada==2){
+                            $retrasos[$empleado->id]++;
+                            $dias[$k][$empleado->id]= "Llegada tarde con ". $captura[0]->retraso ."hr y salida incorrecta con ". $captura[1]->retraso ;
+                        }
+                }else{
+                    $dias[$k][$empleado->id]="No se presento";
+                    $faltas[$empleado->id]++;
+                }
+
+            }
+            $k++;
+        }
+        return view('capturas.reportes',compact('fecha','nuevafecha','empleados','dias','faltas','retrasos'));
     }
 
     /**

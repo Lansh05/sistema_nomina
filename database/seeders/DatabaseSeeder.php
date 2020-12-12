@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Concepto;
 
 use App\Models\Captura;
 class DatabaseSeeder extends Seeder
@@ -31,12 +32,12 @@ class DatabaseSeeder extends Seeder
         ));
 
         Concepto::create(array(
-            'id' => 1,
+            'id' => 2,
             'descripcion' => 'Puntual',
         ));
 
         Concepto::create(array(
-            'id' => 1,
+            'id' => 3,
             'descripcion' => 'Falta',
         ));
 

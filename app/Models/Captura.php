@@ -17,5 +17,5 @@ class Captura extends Model
     /**
      * @var array
      */
-    protected $fillable = ['fecha','empleado','concepto'];
+    protected $fillable = ['fecha','empleado','horacheck','llegada','retraso'];
 }

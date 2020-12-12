@@ -12,11 +12,12 @@
                 </div>
                 <div class="col-6">
                     <div class="text-right">
-                        <input class="form-control" type="date" name="fecha" id="fecha" value="{{$fecha}}">                        
+                        <input class="form-control" type="date" name="fecha" id="fecha" value="{{$fecha}}" style="display:none">                        
                     </div>
                 </div>    
             </div>
             <hr>
+            <body onload="startTime()">
             @if(session('success'))
                 <div class="row">
                     <div class="container">
@@ -44,109 +45,115 @@
                     </div>
                 </div>
             @endif
-            <div id="tabladatos" class="table2 table-responsive">
-                <table class="table table-bordered ">
-                    <thead class="thead-dark">
-                    <tr>
-                    <th>Empleado    </th>
-                    <th scope="col" style="width:10%">Puntual    </th>
-                    <th scope="col" style="width:10%">Retraso    </th>
-                    <th scope="col" style="width:10%">Falta    </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <form action="{{route('capturas.store')}}" method="POST" id="dataCaptura">
-                    {{ csrf_field() }}
-                        @foreach($empleados as $empleado)
-                            <tr>
-                                <td>
-                                    {{$empleado->nombre." ".$empleado->apellidopat}}
-                                    <button style="float:right;" title="Añadir Nota" type="button" class="btn btn-success" onClick="openModal({{$empleado->id}})" data-whatever="@fat"><i class="fa fa-plus"></i></button>
-
-                                </td>
-                                    <input type="hidden" name="idempleado[]" id="idempleado" value="{{$empleado->id}}">
-                                   
-                        
-                                <td style="text-align:center;"> 
-                                    <input  type="radio" name="concepto_{{$empleado->id}}" id="concepto_{{$empleado->id}}" value="1" checked>
-                                </td>
-                                <td style="text-align:center;">
-                                    <input  type="radio" name="concepto_{{$empleado->id}}" id="concepto_{{$empleado->id}}" value="2" >
-                                </td>
-                                <td style="text-align:center;">
-                                    <input  type="radio" name="concepto_{{$empleado->id}}" id="concepto_{{$empleado->id}}" value="3" >
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div style="float:right">
-                    <button class="btn btn-warning" type="submit" onClick="event.preventDefault();document.getElementById('dataCaptura').submit();">Terminar Captura</button>
-                </div>
+            <div id="tabladatos" style="text-align:center;" >
+                    <div class="col-md-4 form-inline" style="text-align:center;" >
+                        <label for="clavemepleado">Introduzca su numero de empleado</label>
+                        <input type="text" class="form-control"  name="numeroempleado"id="numeroempleado">
+                        <button class="btn btn-success"type="button" onClick="check()"style="margin-left:10px">Check</button>
+                    </div>
+                    <input type="hidden" id="horacheck" name="horacheck">
+                    <div id="clockdate">
+                        <div class="clockdate-wrapper">
+                            <div id="clock"></div>
+                            <div id="date"></div>
+                        </div>
+                    </div>
             </div>
-        </form>
-        </div>
-    </div>
     @endsection
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Nota</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <input type="hidden" name="id" id="id">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Nota:</label>
-            <textarea name="nota" style="width:400px;heigth:200px;"id="nota" class="form-control"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-success" onClick="addNota()">Guardar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 <script>
-function openModal(id){
-    $('#exampleModal').modal("show");
-    $('#id').val(id);
+
+
+function startTime() {
+    var today = new Date();
+    var hr = today.getHours();
+    var min = today.getMinutes();
+    var sec = today.getSeconds();
+    ap = (hr < 12) ? "<span>AM</span>" : "<span>PM</span>";
+    hr = (hr == 0) ? 12 : hr;
+    hr = (hr > 12) ? hr - 12 : hr;
+    //Add a zero in front of numbers<10
+    hr = checkTime(hr);
+    min = checkTime(min);
+    sec = checkTime(sec);
+    document.getElementById("clock").innerHTML = hr + ":" + min + ":" + sec + " " + ap;
+    
+    var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    var days = ['Domigno', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+    var curWeekDay = days[today.getDay()];
+    var curDay = today.getDate();
+    var curMonth = months[today.getMonth()];
+    var curYear = today.getFullYear();
+    var date = curWeekDay+", "+curDay+" "+curMonth+" "+curYear;
+    document.getElementById("date").innerHTML = date;
+    document.getElementById("horacheck").value = hr + ":" + min + ":" + sec;
+    
+    var time = setTimeout(function(){ startTime() }, 500);
+}
+function checkTime(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
 }
 
-
-        function addNota(){
+        function check(){
         var datos = new FormData();
         datos.append( '_token', "{{ csrf_token() }}");
-        datos.append( 'idempleado', $('#id').val());
-        datos.append('descripcion',$('#nota').val());
+        
+      
         datos.append('fecha', $('#fecha').val());
+        datos.append('horacheck', $('#horacheck').val());
+        datos.append('numempleado', $('#numeroempleado').val());
 
         $.ajax({
-            url: '{{url("capturas")}}/storenota',
+            url: '{{url("capturas")}}/store',
             type:'POST',
             data:datos,
             contentType:false,
             processData:false,
             success:function(respuesta){
-                
-                $('#nota').val("");
-                $('#exampleModal').modal("hide");
-
-                Swal.fire('Eliminado!', '', 'success');
+                if(respuesta.res){
+                    Swal.fire(respuesta.msg+'!', '', 'success')
                     
-              
+                }
+                else{
+                    Swal.fire(respuesta.msg+'!', '', 'warning')
+                }
             }    
         });
     }
 
-
 </script>
+<style>
+.clockdate-wrapper {
+    background-color: #333;
+    padding:25px;
+    max-width:350px;
+    width:100%;
+    text-align:center;
+    border-radius:5px;
+    margin:0 auto;
+    margin-top:15%;
+}
+#clock{
+    background-color:#333;
+    font-family: sans-serif;
+    font-size:60px;
+    text-shadow:0px 0px 1px #fff;
+    color:#fff;
+}
+#clock span {
+    color:#888;
+    text-shadow:0px 0px 1px #333;
+    font-size:30px;
+    position:relative;
+    top:-27px;
+    left:-10px;
+}
+#date {
+    letter-spacing:10px;
+    font-size:14px;
+    font-family:arial,sans-serif;
+    color:#fff;
+}
+</style>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeNota extends Migration
+class ChangeEmpleados extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class ChangeNota extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('capturas', function (Blueprint $table) {
+        Schema::table('empleados', function (Blueprint $table) {
             // ...
-            $table->integer('idnota')->nullable();
+            $table->String('numempleado')->nullable();
             // ...
         });
     }
@@ -28,9 +27,8 @@ class ChangeNota extends Migration
      */
     public function down()
     {
-        //
-        Schema::table('capturas', function (Blueprint $table) {
-            $table->dropIfExists('nota');
+        Schema::table('empleados', function (Blueprint $table) {
+            $table->dropIfExists('numempleado');
         });
     }
 }

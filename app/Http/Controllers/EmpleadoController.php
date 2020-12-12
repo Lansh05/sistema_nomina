@@ -60,6 +60,9 @@ class EmpleadoController extends Controller
         $empleado->rfc=$request->rfc;
         $empleado->idpuesto=$request->idpuesto;
         $empleado->fechaalta=date('Y-m-d');
+        $empleado->numempleado=$request->numempleado;
+        $empleado->horaentrada=$request->horaentrada;
+        $empleado->horasalida=$request->horasalida;
 
         if($empleado->save()){
             return redirect()->route('empleados.index');

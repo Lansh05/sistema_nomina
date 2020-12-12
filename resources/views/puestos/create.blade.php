@@ -60,20 +60,9 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="apPat">Salario:</label>
+                                    <label for="apPat">Salario Quincenal:</label>
                                     <input type="number" name="salario" id="salario" class="form-control" placeholder="Salario...">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div  class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">Tipo Salario:</label>
-                                    <select name="idtipo" id="idtipo" class="form-control">
-                                        <option value="1">Quincenal</option>
-                                        <option value="2">Semanal</option>
-                                        <option value="3">Diario</option>
-                                    </select>
+                                    <input name="idtipo" type='hidden' id="idtipo" value="1" class="form-control">
                                 </div>
                             </div>
                         </div>

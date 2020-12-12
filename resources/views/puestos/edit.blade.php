@@ -63,19 +63,8 @@
                                 <div class="form-group">
                                     <label for="apPat">Salario:</label>
                                     <input type="number" name="salario" id="salario" class="form-control" placeholder="Salario..." value="{{$puesto->salario}}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div  class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">Tipo Salario:</label>
-                                    <select name="idtipo" id="idtipo" class="form-control">
-                                    
-                                        <option value="1" @if($puesto->tiposueldo==1) selected @endif >Quincenal</option>
-                                        <option value="2" @if($puesto->tiposueldo==2) selected @endif>Semanal</option>
-                                        <option value="3" @if($puesto->tiposueldo==3) selected @endif>Diario</option>
-                                    </select>
+                                    <select name="idtipo" id="idtipo" type="hidden" value="1"class="form-control">
+
                                 </div>
                             </div>
                         </div>

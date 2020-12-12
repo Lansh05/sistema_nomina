@@ -1,6 +1,8 @@
 @extends('plantillas.privada')
 @section('content')
     <!-- ANEXANDO NAVEGACION -->
+    <form action="{{route('capturas.reportes')}}" method="POST">
+    {{ csrf_field() }}
     <div class="block block-rounded block-bordered">
         <div class="block-content block-content-full">
             <div class="row">
@@ -14,10 +16,11 @@
                         <input class="form-control" type="date" name="fecha" id="fecha" value="{{$fecha}}">                        
                     </div>
                 </div>    
-                <div class="col-3">
+                <div class="col-3 form-inline">
                     <div class="text-right">
                         <input class="form-control" type="date" name="nuevafecha" id="nuevafecha" value="{{$nuevafecha}}">                        
                     </div>
+                    <button class="btn btn-success" style="margin:10px;">Buscar</button>
                 </div>    
             </div>
             <hr>
@@ -49,36 +52,79 @@
                 </div>
             @endif
             <div id="tabladatos" class="table2 table-responsive">
-                <table class="table table-bordered ">
-                    <thead class="thead-dark">
+            <table class="table">
+                    <thead class="thead-dark"> 
                     <tr>
-                    <th>Empleado    </th>
-                    <th>Info</th>
-                    <th scope="col" style="width:10%">Puesto</th>
-                    <th scope="col" style="width:10%">Faltas   </th>
-                    <th scope="col" style="width:10%">Salario</th>
-                    <th scope="col" style="width:10%">Descontado</th>
-                    <th scope="col" style="width:10%">Total</th>
+                    <th>Datos</th>
+                    @foreach($empleados as $empleado)
+                        <th>{{$empleado->nombre." ".$empleado->apellidopat}}</th>
+                    @endforeach
+                    
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($capturas as $captura)
+                        <tr>
+                        <td>Faltas</td>
+                        @foreach($empleados as $empleado)
+                        <th>{{$faltas[$empleado->id]}}</th>
+                        @endforeach
+                        </tr>
+                        <tr>
+                        <td>Retrasos o salidas a des-hora</td>
+                        @foreach($empleados as $empleado)
+                        <th>{{$retrasos[$empleado->id]}}</th>
+                        @endforeach
+                        </tr>
+                        <tr>
+                        <td>Sueldo</td>
+                        @foreach($empleados as $empleado)
+                        <th>{{$empleado->salario}}</th>
+                        @endforeach
+                        </tr>
+                        <tr>
+                        <td>Descuento de ISR 1.9%</td>
+                        @foreach($empleados as $empleado)
+                        <th>{{number_format($empleado->salario *.19,2)}}</th>
+                        @endforeach
+
+                        </tr>
+                        <tr>
+                        <td>Total con descuentos</td>
+                        @foreach($empleados as $empleado)
+                        
+                        <th>{{number_format($empleado->salario-((($empleado->salario-$empleado->salario *.19)/15)*$faltas[$empleado->id]) ,2 )                 }}</th>
+                        @endforeach
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <div id="tabladatos" class="table2 table-responsive">
+            <table class="table">
+                    <thead class="thead-dark"> 
                     <tr>
-                    <td>{{$captura->nombre}}  {{$captura->apellidopat}} </td>
-                    <td> {{$captura->msg}}   </td>
-                    <td>{{$captura->descripcion}}</td>
-                    <td>{{$captura->faltas}}</td>
-                    <td>{{$captura->salario}} </td>
-                    <td>{{number_format($captura->desc,2)}} </td>
-                    <td>{{number_format($captura->total,2)}} </td>
-                    
-                    
+                    <th>Día</th>
+                    @foreach($empleados as $empleado)
+                        <th>{{$empleado->nombre." ".$empleado->apellidopat}}</th>
+                    @endforeach
                     
                     </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($dias as $dia)
+                        <tr>
+                        
+                            <td style="width:200px;"><strong>{{$dia['dia']}}</strong></td>
+                            @foreach($empleados as $empleado)
+                            <td style="width:200px;">{{$dia[$empleado->id]}}</td>
                     @endforeach
+                        </tr>
+                    @endforeach
+                        
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    </form>
     @endsection

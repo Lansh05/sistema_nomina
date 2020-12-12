@@ -98,6 +98,28 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div  class="col-md-6">
+                                <div class="form-group">
+                                <label for="numempleado">Numero de empleado</label>
+                                    <input type="text" name="numempleado" id="numempleado" class="form-control" placeholder="Numero de empleado..." required>
+                                </div>
+                            </div>
+                            <div  class="col-md-6">
+                                <div class="form-group">
+                                <label for="numempleado">Hora de entrada</label>
+                                    <input type="text" name="horaentrada" id="horaentrada" class="form-control" placeholder="Hora entrada..." required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div  class="col-md-6">
+                                <div class="form-group">
+                                <label for="numempleado">Hora de salida</label>
+                                    <input type="text" name="horasalida" id="horasalida" class="form-control" placeholder="Hora salida..." required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-4"></div>
                                 <div class="col-md-4">
                                     <button class="btn btn-success" type="submit">Guardar</button>
