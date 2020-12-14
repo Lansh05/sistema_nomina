@@ -153,6 +153,8 @@ class CapturaController extends Controller
             $fecha=$request->fecha;
         }
 
+        $numdias=$this->dias_transcurridos($fecha,$nuevafecha);
+
         $empleados=DB::select('  
         select  
         empleados.id,
@@ -174,6 +176,9 @@ class CapturaController extends Controller
         $dias;
        $fechas=[];
         $fechaInicio=strtotime("$fecha");
+
+        
+
         $fechaFin=strtotime("$nuevafecha");
         //Recorro las fechas y con la función strotime obtengo los lunes
        //Recorro las fechas y con la función strotime obtengo los lunes
@@ -218,9 +223,11 @@ class CapturaController extends Controller
 
         $faltas=[];
         $retrasos=[];
+        $completos=[];
             foreach($empleados as $empleado){
                 $retrasos[$empleado->id]=0;
                 $faltas[$empleado->id]=0;
+                $completos[$empleado->id]=0;
             }
         foreach($fechas as $fechacap){
             foreach($empleados as $empleado){
@@ -235,6 +242,7 @@ class CapturaController extends Controller
                             $dias[$k][$empleado->id]= "Este empleado no registro salida, llegada tarde con ". $captura[0]->retraso ." de retraso";
                         }
                         if(count($captura)==2 && $captura[0]->llegada==1 && $captura[1]->llegada==1){
+                            $completos[$empleado->id]++;
                             $dias[$k][$empleado->id]="Cumplio su horario correctamente";
                         }
                         if(count($captura)==2 && $captura[0]->llegada==2 && $captura[1]->llegada==1){
@@ -257,9 +265,16 @@ class CapturaController extends Controller
             }
             $k++;
         }
-        return view('capturas.reportes',compact('fecha','nuevafecha','empleados','dias','faltas','retrasos'));
+        return view('capturas.reportes',compact('fecha','nuevafecha','empleados','dias','faltas','retrasos','numdias','completos'));
     }
 
+
+    function dias_transcurridos($fecha_i,$fecha_f)
+{
+	$dias	= (strtotime($fecha_i)-strtotime($fecha_f))/86400;
+	$dias 	= abs($dias); $dias = floor($dias);		
+	return $dias;
+}
     /**
      * Show the form for editing the specified resource.
      *

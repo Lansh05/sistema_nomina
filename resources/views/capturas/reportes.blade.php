@@ -86,13 +86,21 @@
                         @foreach($empleados as $empleado)
                         <th>{{number_format($empleado->salario *.19,2)}}</th>
                         @endforeach
+                        <tr>
+                        <td>Sueldo por día</td>
+                        @foreach($empleados as $empleado)
+                        <th>{{number_format($empleado->salario /15)}}</th>
+                        @endforeach
+                        </tr>
+ 
+
+                      
 
                         </tr>
                         <tr>
                         <td>Total con descuentos</td>
                         @foreach($empleados as $empleado)
-                        
-                        <th>{{number_format($empleado->salario-((($empleado->salario-$empleado->salario *.19)/15)*$faltas[$empleado->id]) ,2 )                 }}</th>
+                        <th>{{number_format($empleado->salario-((($empleado->salario)/15)*$faltas[$empleado->id]),2 )                 }}</th>
                         @endforeach
                         </tr>
                         
