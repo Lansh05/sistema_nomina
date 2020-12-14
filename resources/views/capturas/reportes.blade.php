@@ -106,7 +106,7 @@
                         <tr>
                         <td>Total con descuentos</td>
                         @foreach($empleados as $empleado)
-                        <th>{{number_format($empleado->salario-((($empleado->salario)/15)*$faltas[$empleado->id]),2 )                 }}</th>
+                        <th>{{number_format($empleado->salario-((($empleado->salario)/15)*$faltas[$empleado->id])- ($retrasos[$empleado->id]*($empleado->salario/15)*.40),2 )                 }}</th>
                         @endforeach
                         </tr>
                         
