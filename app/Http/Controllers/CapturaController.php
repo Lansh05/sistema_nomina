@@ -169,7 +169,8 @@ class CapturaController extends Controller
         empleados.horasalida,
         puestos.descripcion,
         puestos.salario  ,
-        puestos.tiposueldo from empleados inner join puestos on puestos.id=empleados.id');
+        puestos.tiposueldo from empleados inner join puestos on puestos.id=empleados.idpuesto');
+
         $dias;
        $fechas=[];
         $fechaInicio=strtotime("$fecha");
