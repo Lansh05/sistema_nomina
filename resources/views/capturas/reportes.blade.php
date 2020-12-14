@@ -76,6 +76,11 @@
                         @endforeach
                         </tr>
                         <tr>
+                        <td>Días completos</td>
+                        @foreach($empleados as $empleado)
+                        <th>{{$completos[$empleado->id]}}</th>
+                        @endforeach
+                        </tr>
                         <td>Sueldo</td>
                         @foreach($empleados as $empleado)
                         <th>{{$empleado->salario}}</th>
@@ -92,6 +97,7 @@
                         <th>{{number_format($empleado->salario /15)}}</th>
                         @endforeach
                         </tr>
+                        
  
 
                       
