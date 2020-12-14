@@ -61,10 +61,9 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="apPat">Salario:</label>
-                                    <input type="number" name="salario" id="salario" class="form-control" placeholder="Salario..." value="{{$puesto->salario}}">
-                                    <select name="idtipo" id="idtipo" type="hidden" value="1"class="form-control">
-
+                                    <label for="apPat">Salario Quincenal:</label>
+                                    <input type="number" name="salario" id="salario" class="form-control" placeholder="Salario...">
+                                    <input name="idtipo" type='hidden' id="idtipo" value="1" class="form-control">
                                 </div>
                             </div>
                         </div>
